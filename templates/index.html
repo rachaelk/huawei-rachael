@@ -1,0 +1,130 @@
+<html ng-app='huaweiApp'>
+<head>
+	<title>DC Data</title>
+	<base href='/'></base>
+	<link rel="shortcut icon" href="#">
+	<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+	<script type='text/javascript' src='/static/js/directives.js'></script>
+	<script type='text/javascript' src='/static/js/controllers.js'></script>
+	<script type='text/javascript' src='/static/js/app.js'></script>
+  <script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.css' rel='stylesheet' />
+
+    <style>
+      body { }
+      #map { position:absolute; top:0; bottom:0; left:50px; right:50px; width:500px; margin:150px; padding:50px; }
+    </style>
+  </head>
+<body ng-controller='MainController'>
+	<div class='l-single-column clearfix'>
+    <div class='Show Data' style="margin: 10px; border: 5px dotted black; width: 900px">
+    	<input type="text" name="input_route" class="form-control" id="text-box" placeholder="Enter Route..." style="max-width: 300px;" ng-model="input_route">
+    <form role="form" ng-submit="getResults()">  </form> 
+      <h1> Get Data: </h1>
+         <button type="button" class="btn btn-danger" 
+                    ng-click="getResults()">
+                		Fire!
+          </button>
+          <tr ng-model="information">
+                {% raw %}
+                {{information}}
+                {%endraw%}
+                call_function();
+          </tr>
+          <script>
+          function call_function(){
+          console.log('pass')
+              //{% for info in information %}
+              for(var i = 0; i < {{information}}.length; ++i ){
+              console.log('in add_points')
+              L.mapbox.featureLayer({
+              // this feature is in the GeoJSON format: see geojson.org
+              // for the full specification
+              type: 'Feature',
+              geometry: {
+                  type: 'Point',
+                  // coordinates here are in longitude, latitude order because
+                  // x, y is the standard for GeoJSON and many formats
+                  coordinates: [
+                    {{information[i].lat}},
+                    {{information[i].long_}} 
+                  ]
+              },
+              properties: {
+                title: {{information[i].name}},
+                description: 'Bike Station',
+                'marker-size': 'large',
+                'marker-color': '#BE9A6B',
+                'marker-symbol': 'cafe'
+              }
+              }).addTo(map);
+            }
+              //{% endfor %}
+            }
+          </script>
+
+  
+<div id='map'></div>
+             <script>
+                L.mapbox.accessToken = 'pk.eyJ1Ijoia2VydWlxaXUiLCJhIjoiMDlhYTc1OTQ4M2ExYjU2NTMwNzA1OGEwMGNiMmY0Y2QifQ.cwg1kVVOBUgcbB4lk_uv4g';
+          // Replace 'mapbox.streets' with your map id.
+          var mapboxTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=' + L.mapbox.accessToken, {
+              attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+          });
+
+          dc_long  = -77.0164;
+          dc_lat = 38.9047;
+
+          var map = L.map('map')
+              .addLayer(mapboxTiles)
+              .setView([dc_lat, dc_long], 15);
+
+
+        /*function add_points(map) {
+          if(information != undefined){
+            {% for info in information %}
+              console.log('in add_points')
+              L.mapbox.featureLayer({
+              // this feature is in the GeoJSON format: see geojson.org
+              // for the full specification
+              type: 'Feature',
+              geometry: {
+                  type: 'Point',
+                  // coordinates here are in longitude, latitude order because
+                  // x, y is the standard for GeoJSON and many formats
+                  coordinates: [
+                    {{info.lat}},
+                    {{info.long_}} 
+                  ]
+              },
+              properties: {
+                title: {{info.name}},
+                description: 'Bike Station',
+                'marker-size': 'large',
+                'marker-color': '#BE9A6B',
+                'marker-symbol': 'cafe'
+              }
+              }).addTo(map);
+            {% endfor %}
+          }
+        }
+              console.log('pass1')
+              add_points(map)
+              */
+
+           </script>      
+           
+           
+           
+    </div>
+
+		<div class='l-grid-9 l-push-3'>
+			<div ng-view></div>
+		</div>
+
+    
+
+	</div>
+</body>
+</html>
