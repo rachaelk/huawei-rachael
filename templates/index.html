@@ -16,65 +16,59 @@
       #map { position:absolute; top:0; bottom:0; left:50px; right:50px; width:500px; margin:150px; padding:50px; }
     </style>
   </head>
-<script>
-          
-          console.log('pass')
-          function add_points(){
-            if (information != undefined){
-              {% for info in information %}
-              
-              console.log('in add_points')
-              L.mapbox.featureLayer({
-              // this feature is in the GeoJSON format: see geojson.org
-              // for the full specification
-              type: 'Feature',
-              geometry: {
-                  type: 'Point',
-                  // coordinates here are in longitude, latitude order because
-                  // x, y is the standard for GeoJSON and many formats
-                  coordinates: [
-                    {{info.lat}},
-                    {{info.long_}} 
-                  ]
-              },
-              properties: {
-                title: {{info.name}},
-                description: 'Bike Station',
-                'marker-size': 'large',
-                'marker-color': '#BE9A6B',
-                'marker-symbol': 'cafe'
-              }
-              }).addTo(map);
-        
-              {% endfor %}
-            }
-            }
-          </script>
-
   
 <body ng-controller='MainController'>
 	<div class='l-single-column clearfix'>
     <div class='Show Data' style="margin: 10px; border: 5px dotted black; width: 900px">
     	<input type="text" name="input_route" class="form-control" id="text-box" placeholder="Enter Route..." style="max-width: 300px;" ng-model="input_route">
-    <form role="form" ng-submit="getResults()">  </form> 
+    
       <h1> Get Data: </h1>
+      <button onclick ="putData()"> Add Stations </button>
          <button type="button" class="btn btn-danger" 
                     ng-click="getResults()">
-                		Fire!
+                		Fire!     
+
           </button>
-          <tr ng-model="information">
-                {% raw %}
-                {{information}}
-                {%endraw%}
-                <script>
-                add_points()
-                </script>
-                
-          </tr>
-          
-  
+
+
+  <!-- <script> 
+  //   var informat = {{information}}
+  //         console.log('pass2')
+  //         function add_points(){
+            
+  //             console.log(informat)
+  //             for( info in informat){
+  //             console.log('in add_points')
+  //             L.mapbox.featureLayer({
+  //             // this feature is in the GeoJSON format: see geojson.org
+  //             // for the full specification
+  //             type: 'Feature',
+  //             geometry: {
+  //                 type: 'Point',
+  //                 // coordinates here are in longitude, latitude order because
+  //                 // x, y is the standard for GeoJSON and many formats
+  //                 coordinates: [
+  //                   info.long_,
+  //                   info.lat
+  //                 ]
+  //             },
+  //             properties: {
+  //               title: info.name,
+  //               description: 'Bike Station',
+  //               'marker-size': 'large',
+  //               'marker-color': '#BE9A6B',
+  //               'marker-symbol': 'cafe'
+  //             }
+  //             }).addTo(map);
+        
+  //             }
+            
+  //           }
+          </script> -->
+
+
 <div id='map'></div>
-             <script>
+             <script type="text/javascript">
                 L.mapbox.accessToken = 'pk.eyJ1Ijoia2VydWlxaXUiLCJhIjoiMDlhYTc1OTQ4M2ExYjU2NTMwNzA1OGEwMGNiMmY0Y2QifQ.cwg1kVVOBUgcbB4lk_uv4g';
           // Replace 'mapbox.streets' with your map id.
           var mapboxTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=' + L.mapbox.accessToken, {
@@ -88,38 +82,51 @@
               .addLayer(mapboxTiles)
               .setView([dc_lat, dc_long], 15);
 
+          function putData(){
 
-        /*function add_points(map) {
-          if(information != undefined){
-            {% for info in information %}
-              console.log('in add_points')
+            info = angular.element(document.querySelector('[ng-controller="MainController"]')).scope().information;
+             pinTheMap(info);
+           }
+
+
+function pinTheMap(data){
+  console.log('hi')
+  var markerArray = new Array(data.length)
+  for (var i = 0; i < data.length; i++){
+    park = data[i];
+    markerArray[i] = L.marker([park.lat, park.lon]).bindPopup(park.name);
+  }
+  markerLayerGroup = L.layerGroup(markerArray).addTo(map);
+}
+
+
+          function add_points(information){ 
+              console.log('hi')
+              console.log({{information}})
+              for (info in information){
+              console.log(info.name)
               L.mapbox.featureLayer({
-              // this feature is in the GeoJSON format: see geojson.org
-              // for the full specification
               type: 'Feature',
               geometry: {
                   type: 'Point',
                   // coordinates here are in longitude, latitude order because
                   // x, y is the standard for GeoJSON and many formats
                   coordinates: [
-                    {{info.lat}},
-                    {{info.long_}} 
+                    info.lon,
+                    info.lat
                   ]
               },
               properties: {
-                title: {{info.name}},
+                title: info.name,
                 description: 'Bike Station',
                 'marker-size': 'large',
                 'marker-color': '#BE9A6B',
                 'marker-symbol': 'cafe'
               }
               }).addTo(map);
-            {% endfor %}
-          }
-        }
-              console.log('pass1')
-              add_points(map)
-              */
+                }
+              }
+            
 
            </script>      
            

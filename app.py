@@ -104,20 +104,19 @@ def get_blocks():
 def get_bikeStations():
 	stations = db_session.query(BikeStation);
 	s_lats = []; 
-	s_longs = [];
+	s_lons = [];
 	for s_ in stations:
 		s_lats.append(db_session.scalar(s_.geom.ST_Y()))
-		s_longs.append(db_session.scalar(s_.geom.ST_X()))
-		
+		s_lons.append(db_session.scalar(s_.geom.ST_X()))
+
 	json_results = [];
-	for station, lat, long_ in zip(stations, s_lats, s_longs):
+	for station, lat, lon in zip(stations, s_lats, s_lons):
 		stat = {
 			'name': station.name,
 			'lat': lat,
-			'long_': long_
+			'lon': lon
 		} 
 		json_results.append(stat)
-
 	return json.dumps(json_results);
 
 
