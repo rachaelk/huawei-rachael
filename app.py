@@ -108,8 +108,7 @@ def get_bikeStations():
 	for s_ in stations:
 		s_lats.append(db_session.scalar(s_.geom.ST_Y()))
 		s_longs.append(db_session.scalar(s_.geom.ST_X()))
-	
-
+		
 	json_results = [];
 	for station, lat, long_ in zip(stations, s_lats, s_longs):
 		stat = {

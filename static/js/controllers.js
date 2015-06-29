@@ -1,31 +1,19 @@
 var controllers = angular.module('huaweiApp.controllers', []);
 
-controllers.controller('MainController',   ['$scope', '$log', '$http', 
-    function($scope, $log, $http ){
+controllers.controller('MainController', function($scope, $log, $http, bikeStationData){
 $scope.getResults = function() {
-      $log.log("test");
-      var userInput = $scope.input_route;
-      if ((userInput == 'bike stations') || (userInput == 'Bike Stations' || userInput == 'Bike stations')) {
-        userInput = 'bikeStations';
-      }
+    bikeStationData.getBikeStations().then(function (data) {
+      $scope.information = data;
+    })
+});
 
-      // fire the API request
-      $http.get('/data/' + userInput).
-        success(function(data, status, headers, config) {
-          $scope.information = data;
+controllers.controller('MainController2', function ($scope, sampleData) {
+  $scope.text = 'Hello this is app';
+  sampleData.getWeatherData().then(function (data) {
+    $scope.data = data;
+  });
+});
 
-        }).
-        error(function(data, status, headers, config) {
-          $log.log(status);
-        });
-
-    };
-
-
-
-  }
-  
-  ]);
 
 
 controllers.controller('404Controller', function () {
