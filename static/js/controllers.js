@@ -5,6 +5,7 @@ $scope.getResults = function() {
     bikeStationData.getBikeStations().then(function (data) {
       $scope.information = data;
     })
+    }
 });
 
 controllers.controller('MainController2', function ($scope, sampleData) {
