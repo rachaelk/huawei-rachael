@@ -100,13 +100,13 @@ var style = function (feature) {
       }
     },
     dc: {
-      lat: 39.1130,
-      lng: -76.8123,
-      zoom: 12
+      lat: 38.9047,
+      lng: -77.0164,
+      zoom: 10
     },
     defaults: {
       maxZoom: 16,
-      minZoom: 10
+      minZoom: 3
     }
   });
 
