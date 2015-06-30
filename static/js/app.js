@@ -16,19 +16,7 @@ huaweiApp.factory('sampleData', function ($q, $http) {
       }
       return deferred.promise;
     }
-    /*getBikeStationData: function () {
-      var deferred = $q.defer();
-      if (!bikeStations) {
-        $http.get('/data/bikeStations'
-        ).success(function (data, status, headers, response) {
-          bikeStations = data;
-          deferred.resolve(data);
-        }).error(function (data, status, headers, response) {
-          deferred.reject(status);
-        });
-      }
-      return deferred.promise;
-    }*/
+   
   };
 });
 
@@ -63,18 +51,26 @@ var style = function (feature) {
       fillOpacity: 0.8,
       weight: 1,
       radius: 6,
-      clickable: true
+      clickable: true,
+      name: feature.properties.name
     }
   };
 
   bikeStationData.getBikeStations().then(function (data) {
     $scope.geojson = data.features[0];
+
     $scope.stations = {
       data: data,
+
       pointToLayer: function (feature, latlng) {
         return new L.circleMarker(latlng, style(feature));
-      }
+      },
+      onEachFeature: function (feature, layer) {
+            layer.bindPopup(feature.properties.name);
+        } 
     }
+    
+
   });
 
   angular.extend($scope, {
