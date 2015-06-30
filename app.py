@@ -87,24 +87,31 @@ def get_data():
 
 @app.route('/data/blockGroups', methods=['GET', 'POST'])
 def get_blocks():
-	b = db_session.query(BlockGroup).first()
-	return jsonify({
-		'state' : b.state,
-		'county' : b.county,
-		'tract'  : b.tract,
-		'index'  : b.block_group,
-		'geo_id' : b.geo_id,
-		'census_data' : b.census_data,
-		'basic' : b.basic,
-		'tiger' : b.tiger
-	})
-
-
+	groups = db_session.query(BlockGroup);
+	rets = []
+	for g in groups:
+		geom_b = json.loads(db_session.scalar(g.basic.ST_AsGeoJSON()))
+		geom_t = json.loads(db_session.scalar(g.tiger.ST_AsGeoJSON()))
+		feature = Feature(
+			id=g.id,
+			block_group = g.block_group,
+			geometry_basic=geom_b,
+			geometry_tiger=geom_t,
+			properties={
+				'state': g.state,
+				'county': g.county,
+				'tract': g.tract,
+				'geo_id': g.geo_id,
+				'census_data': g.census_data
+			}
+		)
+		rets.append(feature)
+	return jsonify(FeatureCollection(rets));
 
 @app.route('/data/bikeStations', methods=['GET', 'POST'])
 def getbikeStations():
-	rets = []
 	st = db_session.query(BikeStation);
+	rets = []
 	for s in st:
 		geom = json.loads(db_session.scalar(s.geom.ST_AsGeoJSON()))
 		feature = Feature(
@@ -122,52 +129,82 @@ def getbikeStations():
 
 @app.route('/data/bikeRides', methods=['GET', 'POST'])
 def get_bikeRides():
-	r = db_session.query(BikeRide).first()
-	return jsonify({
-		'duration': r.duration,
-		'start_date':r.start_date,
-		'end_date': r.end_date,
-		'subscribed': r.subscribed,
-		'start_station_id':r.start_station_id,
-		'end_station_id':r.end_station_id,
-		#'start_station':r.start_station,
-		#'end_station':r.end_station
-	})
+	rides = db_session.query(BikeRide)
+	rets = [];
+	for r in rides:
+		feature = Feature(
+			id = r.id,
+			properties ={
+				'duration': r.duration,
+				'start_date':r.start_date,
+				'end_date': r.end_date,
+				'subscribed': r.subscribed,
+				'start_station_id':r.start_station_id,
+				'end_station_id':r.end_station_id,
+				#'start_station':r.start_station,
+				#'end_station':r.end_station
+			}
+		)
+		rets.append(feature)
+	return jsonify(FeatureCollection(rets))
+	
 
 @app.route('/data/subwayStations', methods=['GET', 'POST'])
 def get_subwayStations():
-	ss = db_session.query(SubwayStation).first()
-	return jsonify({
-		'name'  : ss.name,
-		'code'  : ss.code,
-		'lines' : ss.lines,
-		'delays': ss.delays
-		#'geom' : ss.geom,
-	})
+	ss = db_session.query(SubwayStation)
+	rets = []
+	for s in ss:
+		geom = json.loads(db_session.scalar(s.geom.ST_AsGeoJSON()))
+		feature = Feature(
+			id = s.id,
+			geometry = geom,
+			properties ={
+				'name': s.name,
+				'lines': s.lines,
+				'delays': s.delays
+			}
+		)
+		rets.append(feature)
+	return jsonify(FeatureCollection(rets))
 
-@app.route('/data/subwayDelays', methods=['GET', 'POST'])
+
+@app.route('/data/subwayDelays', methods=['GET'])
 def get_delays():
-	sd = db_session.query(SubwayDelay).first()
-	return jsonify({
-		'date': sd.date,
-		'duration': sd.duration,
-		'station' : sd.station_id
-	})
+	sd = db_session.query(SubwayDelay);
+	rets = [];
+	for s in sd:
+		feature = Feature(
+			id = s.id,
+			properties ={
+				'date': s.date,
+				'duration': s.duration,
+				'station_id': s.station_id
+			}
+		)
+		rets.append(feature)
+	return jsonify(FeatureCollection(rets))
 
 
-@app.route('/data/locations', methods=['GET', 'POST'])
+@app.route('/data/locations', methods=['GET'])
 def get_locations():
-	loc = db_session.query(Location).first()
-	return jsonify({
-		'name': loc.name,
-		'rank': loc.rank,
-		'rating': loc.rating,
-		'review_count': loc.review_count,
-		'address': loc.address,
-		'cat': loc.categories
-		#'geom': loc.geom
-	})
-
+	loc = db_session.query(Location)
+	rets = []
+	for l in loc:
+		geom = json.loads(db_session.scalar(l.geom.ST_AsGeoJSON()))
+		feature = Feature(
+			id = l.id,
+			geometry = geom,
+			properties ={
+				'name': l.name,
+				'rank': l.rank,
+				'rating': l.rating,
+				'review_count': loreview_count,
+				'address': l.address,
+				'cat': l.categories
+			}
+		)
+		rets.append(feature)
+	return jsonify(FeatureCollection(rets))
 
 
 if __name__ == '__main__':
