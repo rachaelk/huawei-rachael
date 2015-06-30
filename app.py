@@ -104,7 +104,7 @@ def get_blocks():
 @app.route('/data/bikeStations', methods=['GET', 'POST'])
 def getbikeStations():
 	rets = []
-	st = db_session.query(BikeStation).limit(25)
+	st = db_session.query(BikeStation);
 	for s in st:
 		geom = json.loads(db_session.scalar(s.geom.ST_AsGeoJSON()))
 		feature = Feature(
