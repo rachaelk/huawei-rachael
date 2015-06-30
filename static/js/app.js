@@ -1,6 +1,6 @@
 
 //'use strict';
-var huaweiApp = angular.module('huaweiApp', ['huaweiApp.controllers']);
+/*var huaweiApp = angular.module('huaweiApp', ['huaweiApp.controllers','leaflet-directive']);
 
 huaweiApp.config(function ($routeProvider, $locationProvider) {
 	$routeProvider
@@ -21,57 +21,65 @@ huaweiApp.config(function ($routeProvider, $locationProvider) {
 		});
 
 	$locationProvider.html5Mode(true);
-});
+});*/
 
-huaweiApp.factory('sampleData', function ($q, $http) {
-	var weatherData, bikeStations;
-	return {
-		getWeatherData: function () {
-			var deferred = $q.defer();
-			if (!weatherData) {
-				$http.get('/data/weather'
-				).success(function (data, status, headers, response) {
-					weatherData = data;
-					deferred.resolve(data);
-				}).error(function (data, status, headers, response) {
-					deferred.reject(status);
-				});
-			}
-			return deferred.promise;
-		}
-		/*getBikeStationData: function () {
-			var deferred = $q.defer();
-			if (!bikeStations) {
-				$http.get('/data/bikeStations'
-				).success(function (data, status, headers, response) {
-					bikeStations = data;
-					deferred.resolve(data);
-				}).error(function (data, status, headers, response) {
-					deferred.reject(status);
-				});
-			}
-			return deferred.promise;
-		}*/
-	};
-});
+// huaweiApp.factory('sampleData', function ($q, $http) {
+// 	var weatherData, bikeStations;
+// 	return {
+// 		getWeatherData: function () {
+// 			var deferred = $q.defer();
+// 			if (!weatherData) {
+// 				$http.get('/data/weather'
+// 				).success(function (data, status, headers, response) {
+// 					weatherData = data;
+// 					deferred.resolve(data);
+// 				}).error(function (data, status, headers, response) {
+// 					deferred.reject(status);
+// 				});
+// 			}
+// 			return deferred.promise;
+// 		}
+// 		getBikeStationData: function () {
+// 			var deferred = $q.defer();
+// 			if (!bikeStations) {
+// 				$http.get('/data/bikeStations'
+// 				).success(function (data, status, headers, response) {
+// 					bikeStations = data;
+// 					deferred.resolve(data);
+// 				}).error(function (data, status, headers, response) {
+// 					deferred.reject(status);
+// 				});
+// 			}
+// 			return deferred.promise;
+// 		}
+// 	};
+// });
 
 
-huaweiApp.factory('bikeStationData', function ($q, $http) {
-	var bikeStations;
-	return {
-		getBikeStations: function () {
-			var deferred = $q.defer();
-			if (!bikeStations) {
-				$http.get('/data/bikeStations'
-				).success(function (data, status, headers, response) {
-					bikeSations = data;
-					deferred.resolve(data);
-				}).error(function (data, status, headers, response) {
-					deferred.reject(status);
-				});
-			}
-			return deferred.promise;
-		}
-	};
-});
+// huaweiApp.factory('bikeStationData', function ($q, $http) {
+// 	var bikeStations;
+// 	return {
+// 		getBikeStations: function () {
+// 			var deferred = $q.defer();
+// 			if (!bikeStations) {
+// 				$http.get('/data/bikeStations'
+// 				).success(function (data, status, headers, response) {
+// 					bikeStations = data;
+// 					deferred.resolve(data);
+// 				}).error(function (data, status, headers, response) {
+// 					deferred.reject(status);
+// 				});
+// 			}
+// 			return deferred.promise;
+// 		}
+// 	};
+// });
+
+
+
+
+
+
+
+
 

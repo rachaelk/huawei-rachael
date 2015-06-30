@@ -4,22 +4,23 @@
 	<base href='/'></base>
 	<link rel="shortcut icon" href="#">
 	<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
-	<script type='text/javascript' src='/static/js/controllers.js'></script>
-	<script type='text/javascript' src='/static/js/app.js'></script>
-  <link rel="stylesheet" type="text/css" href="/static/css/style.css"></script>
-  <script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.js'></script>
-  <link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.css' rel='stylesheet' />
+ <script src="/static/includes/angular.min.js"></script>
+  <script type="text/javascript" src='static/includes/angular-leaflet-directive.min.js'></script>
+	<script type='text/javascript' src='static/js/controllers.js'></script>
+	<script type='text/javascript' src='static/js/app.js'></script>
+ 	<script type="text/javascript" src='static/includes/mapbox.js'></script>
+  <link rel="stylesheet" type="text/css" href="static/css/style.css"></script>
+  <link rel="stylesheet" type="text/css" href='static/includes/mapbox.css'></link>
   </head>
   
 <body ng-controller='MainController'>
 	<div class='l-single-column clearfix'>
       <h1> Get Data: </h1>
-      <button onclick ="putData()"> Add Stations </button>
+      <button onclick =""> Add Stations </button>
          <button type="button" class="btn btn-danger" ng-click="getResults()"> Load Bike Stations </button>
   </div>
 
-<div id='map'></div>
+<!-- <div id='map'></div>
   <script type="text/javascript">
     L.mapbox.accessToken = 'pk.eyJ1Ijoia2VydWlxaXUiLCJhIjoiMDlhYTc1OTQ4M2ExYjU2NTMwNzA1OGEwMGNiMmY0Y2QifQ.cwg1kVVOBUgcbB4lk_uv4g';
           
@@ -43,6 +44,9 @@
         }
         markerLayerGroup = L.layerGroup(stationArray).addTo(map);
     }
+
   </script>  
+ -->
+  <leaflet tiles='tiles' center='dc' maxbounds='maxbounds' defaults='defaults' geojson='stations' style='width: 100%; top: 100px; height: 400px'></leaflet>
 </body>
 </html>

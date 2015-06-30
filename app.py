@@ -6,6 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 import json
 from geoalchemy2.functions import GenericFunction
 from geoalchemy2 import func
+from geojson import Feature, FeatureCollection, dumps
 
 
 
@@ -45,7 +46,7 @@ def shutdown_session(exception=None):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-	return render_template('index.html')
+	return render_template('index_.html')
 
 # For future ref:
 # @app.route('/start', methods=['POST'])
@@ -101,23 +102,20 @@ def get_blocks():
 
 
 @app.route('/data/bikeStations', methods=['GET', 'POST'])
-def get_bikeStations():
-	stations = db_session.query(BikeStation);
-	s_lats = []; 
-	s_lons = [];
-	for s_ in stations:
-		s_lats.append(db_session.scalar(s_.geom.ST_Y()))
-		s_lons.append(db_session.scalar(s_.geom.ST_X()))
-
-	json_results = [];
-	for station, lat, lon in zip(stations, s_lats, s_lons):
-		stat = {
-			'name': station.name,
-			'lat': lat,
-			'lon': lon
-		} 
-		json_results.append(stat)
-	return json.dumps(json_results);
+def getbikeStations():
+	rets = []
+	st = db_session.query(BikeStation).limit(25)
+	for s in st:
+		geom = json.loads(db_session.scalar(s.geom.ST_AsGeoJSON()))
+		feature = Feature(
+			id=s.id,
+			geometry=geom,
+			properties={
+				'name': s.name
+			}
+		)
+		rets.append(feature)
+	return jsonify(FeatureCollection(rets));
 
 
 	
